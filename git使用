@@ -1,0 +1,32 @@
+- -每次克隆下新代码，在执行任何操作前，必须先使用此命令
+自动生成id
+gitdir=$(git rev-parse --git-dir); scp -p -P 29418 6407002148@gerrit.zte.com.cn:hooks/commit-msg ${gitdir}/hooks/commit-msg
+
+
+
+- -svn代码迁移到git上
+git svn clone svnUrl 
+
+
+Git checkout出现：The following untracked working tree files would be overwritten by checkout
+之前被删除的分支引起的工作树还有缓存的文件
+
+解决办法：
+git clean -d -fx （删除工作树中的缓存文件）
+
+
+
+配置Git 的用户名和邮箱：
+git config --git global use.name "usename"
+git config --git global use.email "email"
+git config --list 查看邮箱用户名配置
+
+
+TortoiseGit不同分支合并代码
+1.1.0分支变动合入到 master分支
+
+切换到目标分支master，showlog日志，点击左上角分支名，切换到源分支-1.1.0，选择需要合并的提交记录
+点击Cherry pick selected commits-->pick all
+
+
+
