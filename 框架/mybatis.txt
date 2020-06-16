@@ -1,0 +1,63 @@
+mybatis:
+-.动态标签
+动态sql的标签
+<if>:    简单的条件判断，内容为null 忽略
+<select>
+select * from user where
+<if test="sex"!=null>
+sex like "%${}%"
+</if>
+and id =#{id}
+</select>
+
+
+<where>: 相当于where条件判断，忽略sql的and和or
+<set>：  修改sql中，忽略最后一个逗号
+<trim>：　　trim 元素的主要功能是可以在自己包含的内容前加上某些前缀，也可以在其后加上某些后缀，与之对应的属性是 prefix 和 suffix；可以把包含内容的首部某些内容覆盖，即忽略，也可以把尾部的某些内容覆盖，对应的属性是 prefixOverrides 和 suffixOverrides；正因为 trim 有这样的功能，它可以用来实现 where 和 set 的效果
+
+<choose>：相当于switch语句，当when标签内部的test满足时，执行结束，都不满足，执行otherwise
+<foreach>:
+
+二 映射
+sqlmapperconfig:
+mapper resource：扫描接口xml
+mapper class: 扫描接口
+
+xml映射：
+对应接口文件要和接口在相同目录下，
+namespace属性，对应映射接口 全限定类名
+
+注解映射：
+在接口方法名上使用编写sql
+
+resultmap：数据字段和封装的实体类属性名称不一致时使用，用于给字段起别名
+<resultmap id="封装的" type="映射到那个pojo" >
+先定位主键id
+<result property='pojo属性' column='数据库字段' >
+
+
+一对一
+<assicasion>
+一对多
+mybatis 中javaType和OfType 的区别
+JavaType和ofType都是用来指定对象类型的，但是JavaType是用来指定pojo中属性的类型，而ofType指定的是映射到list集合属性中pojo的类型。
+
+
+三 底层原理
+原生mybatis
+执行步骤
+创建sqlsessionfactorybuild 对象
+build()读取配置文件 ，创建factory对象   --初始化配置文件
+
+通过opensession()获取sqlsession
+调用sqlsession api
+List<User> list = sqlSession.selectList("com.demo.mapper.UserMapper.getUserByName",params);
+
+--初始化配置文件
+build()重载的方法里 创建xmlsql    即xml解析对象parse
+parse调用本身的parse方法，读取配置文件中的标签值，封装对应的属性，最后返回的对象就是Configuration对象，最后调用另一个重载的方法build(Configurition config)返回sqlsessionfactory对象。
+初始化配置文件的本质就是创建Configuration对象
+
+
+
+
