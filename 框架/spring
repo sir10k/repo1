@@ -1,0 +1,9 @@
+@autowire 和@resource注解的区别
+相同点：都能在bean类的字段或者setter方法上注入
+不同点：
+（1）@autowire默认按类型注入，可以为null值，指定属性require=false；使用@Qualifier注解按名称配置
+        @resource默认按名称注入，根据name指定的名称，没有指定name，按字段名，都找不到，才会按类型注入
+
+（2）@autowire：属于spring
+     @resource：属于j2ee
+@Component  将pojo类注册到spring容器  相当于配置文件 <bean id ="",class="">
