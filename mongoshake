@@ -1,0 +1,69 @@
+MongoShake的介绍与使用
+1概述
+1.1 基本介绍
+golang语言编写的跨数据中心平台。
+1.2基本原理
+通过读取MongoDB集群的Oplog操作日志，对MongoDB的数据进行复制，后续通过操作日志实现特定需求。
+
+
+2配置
+2.1关键配置（mongodb副本集同步到mongodb副本集）
+Mongoshake配置文件collector.conf
+#源集群地址
+mongo_urls = mongodb://10.47.245.77:27017,10.47.245.79:27017,10.47.245.108:27017
+
+#同步模式  operlog表示增量 document表示全量，all表示全量加增量
+sync_mode = operlog
+
+#目标集群地址 
+tunnel.address = mongodb://10.47.245.38:27017,10.47.245.42:27017,10.47.245.51:27017
+2.2部分参数说明
+·  mongo_connect_mode: 源端连接的模式，有几种模式可选：从seconary拉取；从primary拉取；secondary优先拉取；单节点拉取
+
+·  log: log日志相关参数。
+
+·  filter.namespace.black: 黑名单过滤。黑名单内的库表不会被同步，剩下的同步。
+
+·  filter.namespace.white: 白名单过滤。白名单内的库表会被同步，剩下的过滤掉。黑白名单最多只能配置一个，不配置会同步所有库表。
+
+·  context.storage: checkpoint存储的位置，database表示把数据存入MongoDB，api表示把数据存入用户自己提供的http接口。
+
+·  context.storage.url: checkpoint写入到哪个MongoDB，如果源是sharding，此处配置cs地址，checkpoint会写入admin库；如果是副本集，不配置，会默认写入源库，配置则写入配置的库里面。
+
+·  ·worker: 增量阶段并发写入的线程数，如果增量阶段性能不够，可以提高这个配置。
+
+·  ·worker.oplog_compressor: 压缩模式，如果是非direct模式开启这个可以减少网络传输的开销。
+
+
+
+3使用
+3.1主机查看
+需在主中心集群的主机上操作，登陆其中任意一台机器，启动mongodb成功后，执行命令：/home/zxin10/mongodb/bin/mongo，进入提示符
+如果是primary代表当前就是主机，如果是SECONDARY，输入db.isMaster()命令查看。可知主机为10.47.245.108
+
+
+
+
+3.2开启mongoshake
+进入mongoshake根目录，启动命令sh start.sh collector.conf
+
+此时查看进程，进程名：hypervisor
+
+
+3.3 验证同步
+进入本机（108）mongo数据库，成功插入一条数据
+{“2019”：“not bad”}
+
+
+打开另一集群任意机器，例如10.47.245.51
+
+数据已经同步过来了，证明mongoshake启动并运行成功
+
+
+3.3关闭mongoshake
+
+关闭和开启要在同一台服务器上操作，关闭命令，
+sh stop.sh mongoshake.pid
+
+查看进程，26067已被杀死。
+重复执行3.2操作，数据已不能同步到另一集群
