@@ -1,0 +1,39 @@
+通用命令：
+查询进程并去掉本身进程
+ps -ef|grep xxx|grep -v 'grep'
+
+动态查询文件 输出最后十行
+tail -f xxx
+退出查看 ctrl+c
+
+解压文件
+tar -xvf file.tar
+tar -xvzf file tar.gz
+unzip file.zip
+
+ctrl + l 清屏
+dos2unix Windows 文件转换为在linux上可执行的
+
+查找文件
+find 目录 -name 文件名
+
+
+防火墙添加端口号
+添加
+firewall-cmd --zone=public --add-port=80/tcp --permanent    （--permanent永久生效，没有此参数重启后失效）
+重新载入
+firewall-cmd --reload
+查看
+firewall-cmd --zone=public --query-port=80/tcp
+
+操作数据库：
+使用数据库： su - postgres
+进入指定数据库： $plsql -U 数据库名 -d 用户名
+显示所有表：$ \dt
+查看表结构，相当于desc:$ \d tblname
+
+alter table 表名 add column 字段名 数据类型；
+\q 退出数据库
+
+exit 退出数据库
+
