@@ -1,0 +1,234 @@
+
+
+
+
+
+
+技  术  文  件
+
+      技术文件名称：游戏业务管理平台需求及方案概要
+      技术文件编号：
+      版        本：
+
+
+1.简介
+1.1. 目的
+     描述游戏大厅功能实现方案的概要，用于指导研发人员进行游戏大厅的研发。
+1.2.产品介绍
+     随着5G的推进，以客厅为家庭娱乐中心的切入点越来越为各厂商加入商业战略，而以电视大屏作为游戏载体就显得越来越出现各种瓶颈，尤其一些大型游戏对硬件性能的要求是非常高的，在这种情形下云游戏就应运而生，云游戏依托5G的网络和服务器强大的硬件性能将为用户家庭娱乐中心主宰。而我们的游戏大厅就是依靠强大的云游戏平台作为支撑给用户带来游戏的畅玩。
+
+2.功能需求点
+2.1.游戏业务管理平台用户和权限管理
+略（一期不做）目前是说在web里实现（待确认），如果不是该功能是需要做。
+2.2.游戏业务管理平台系统配置
+用于管理游戏业务管理平台全局配置属性，如pct:url, ua:url，订购回调url
+2.3.游戏业务管理平台的鉴权
+1)实现游戏大厅客户端与游戏管理平台的通信身份的鉴权。
+2)在游戏大厅客户端通过接口请求平台时都需要携带该token。
+3)检查用户的合法性后生成对应的token信息返回给客户端，参见UA原有实现。
+4)返回token的同时需要返回客户端必须的配置信息。
+5)提供对应的接口：getUserToken(String mac, String stbId);
+2.4.用户订购套餐鉴权
+1)用户在通过游戏大厅客户端进入游戏畅玩时需要订购对应的套餐，所以这里需要判断用户有没有订购对应的套餐。
+2)游戏平台通过调用对应局点提供的鉴权接口来判断用户订购了哪些套餐。
+3)通过用户订购的套餐再查询套餐包含了哪些游戏，最终将所订购的套餐和该套餐包含的所有游戏的信息返回客户端。
+4)这里需要提供客户端调用接口:getProductsByUserId(String userId);
+
+2.5.游戏信息管理功能（包含录入、修改、删除）
+1)游戏信息的录入页面，提供录入、修改、删除、查询、检索功能。
+2)提供游戏的推送和上线功能
+在游戏录入完毕后，查询vtsb该游戏有没有上线，如果没有上线时需要提供推送和上线功能。
+3)游戏试玩策略管理
+    提供试玩策略配置管理页面。
+4)这里需要提供所有游戏的查询接口： getAllGames()
+
+2.6.游戏详情静态页面生成。
+1)在游戏录入页面成功后，开始检查该游戏是否已上线，如果没有上线进入推送和上线。
+2)如果已经上线，这生成对应静态页面同步到缓存服务器，并将对应的url信息更新到游戏记录中。
+3)游戏详情静态页面的效果必须与游戏客户端整体效果一致。
+4)游戏详情静态页面中需要提供点击启动游戏按钮后调用本地方法的能力。
+
+2.7.游戏大厅pct模板生成(下给pct)
+1)在pct平台根据游戏大厅的客户端精品推荐页面模板生成动态模板json文件。
+2)Pct需要提供接口供游戏大厅调用。
+2.8.套餐信息管理功能（包含新增、修改、删除）
+1)套餐的新增、修改、删除、查询、检索功能
+2)该功能需要提供对应的客户端套餐查询接口：
+    getAllProductsByGameId(String gameID)
+2.9.用户订购信息查询
+1)根据用户id查询已订购套餐（该功能一期可以先不做）
+2.10.与易数据话单信息同步
+1)与易数据针对用户打开游戏、使用时长、订购等话单信息的同步以及数据统计结果的获取。
+2)该功能需要提供游戏排行接口：getGamesRank(String sortType)
+
+2.11.Sp管理
+1)Sp游戏厂商的录入、修改、删除、查询
+2)Sp已上线游戏的查询
+
+2.12.计费分成管理
+1)计费分成策略管理
+2)计费分成明细查询
+3)计费点统计
+
+3.DB设计
+3.1.游戏平台系统配置表 GMS_SYS_CONFIG
+列名	类型	描述
+sys_config_id	Integer	主键自增
+parent_id	Integer	父节点，默认为0
+config_name	String	配置项名称
+config_key_name	String	配置属性的名称
+config_key_value	String	配置属性的值 
+config_desc	String	配置属性的配置说明用途
+
+3.2.游戏信息表 GMS_APP_INFO
+列名	类型	描述
+key_Id	Integer	主键自增
+app_id	String(6)	游戏应用的id
+app_name	String	游戏应用的名称
+app_icon_ur	String	游戏应用的icon url(放在缓存服务器）
+app_poster_url	String	游戏应用的海报url
+app_package_name	String	游戏应用的报名
+app_main_class	String	游戏应用的启动类名
+app_size	String	游戏应用的大小
+app_sp_id	String	游戏应用的sp
+app_category_id	String	游戏应用的类别
+app_online_status	Integer	   游戏应用是否上线
+create_time	String	游戏创建录入时间
+update_time	String	游戏修改时间
+
+3.3.游戏类别表 GMS_APP_CATEGORY
+列名	类型	描述
+category_Id	Integer	主键自增
+parent_id	Integer	父类别
+category_name	Integer	类别名称
+
+3.4.游戏sp信息表 GMS_SP_INFO
+列名	类型	描述
+sp_id	   integer	主键自增
+Sp_name	String	Sp名称
+Sp_desc	String	Sp介绍
+Sp_tel	String	Sp联系
+
+3.5.游戏套餐信息表 GMS_PRODUCT_INFO
+列名	类型	描述
+key_id	   integer	主键自增
+Product_id	String	套餐id从局方申请
+Product_name	String	套餐名称
+Purchase_Type	String	 0：包月支付
+1：按次m元/n小时（m-0.00两位小数 n-0整型）
+2：产品包时段支付
+Product_fee	String	产品价格以分为单位
+Validate_time	String	套餐有效期
+Auto_continue		提示"是否自动续订"选项：0.不提示，1.提示，不存在该字段时默认为不提示
+
+
+
+3.6.套餐游戏关系表 GMS_PRODUCT_GAME_RELATION
+列名	类型	描述
+Real_id	   integer	主键自增
+Game_id	Integer	游戏id
+Product_id	Integer	套餐id
+
+3.7.用户订单信息表 GMS_ORDER_INFO
+3.8.用户订单详情表 GMS_ORDER_DETAIL
+3.9.游戏排行表 GMS_GAME_RANK
+
+
+4.接口
+4.1.获取Token接口
+login(String mac, String stbId, String userinfo);
+4.1.1.接口参数
+名称	说明	数据类型	长度（字节）	是否必填
+Mac	机顶盒的MAC 的md5值:16进制 	String	16	M
+Stbid	机顶盒的Stbid的md5值:16进制	String	16	M
+userInfo	Userid + mac + stbid 使用密钥加密生成的加密字符串	String 	<200	M
+4.1.2.接口应答
+名称	说明	数据类型	长度（字节）	是否必填
+retCode	结果0：成功；1：失败 	String	16	M
+retDesc	结果描述	  String	    256	O
+retObj	返回结果对象的封装	  String	 -	M
+
+名称	说明	数据类型	长度（字节）	是否必填
+token	用于请求验证，后面所有请求需要带上	String	32	M
+pctUrl	用于请求pct配置的josn文件url	String	<200	M
+uaUrl	用于UA鉴权的地址	String	<200	M
+port	UA鉴权端口	String	6	O
+tryPlay	试完策略	String	 <200	M
+notifyUrl	订购后由增值平台反向通知的接口	String	<200	M
+sortNum	我的排行返回游戏个数	String	2	M
+sortType	我的排行类型按月按年按周期	String	1 	O
+
+4.2.游戏鉴权接口
+authGame(String userId, String gameId);
+4.2.1.请求参数
+名称	说明	数据类型	长度（字节）	是否必填
+userId	机顶盒用户id，从机顶盒获取	String	16	M
+gameId	游戏的id	String	6	M
+4.2.2.请求应答
+名称	说明	数据类型	长度（字节）	是否必填
+retCode	结果0：成功；1：失败 	String	16	M
+retDesc	结果描述	  String	    256	O
+productList	失败时需要将该游戏对应的可订购套餐列表返回	  String	 -	O
+
+   productList如下：
+名称	说明	数据类型	长度（字节）	是否必填
+productId	产品ID	String	32	M
+productName	产品名称	String	100	M
+productDesc	产品描述	String	200	O
+purchaseType	0：包月支付
+1：按次m元/n小时（m-0.00两位小数 n-0整型）
+2：产品包时段支付	String	8	O
+fee	产品价格，以分为单位	String		M
+realFee	订购价格，以分为单位	String	8	M
+rentalTerm	租期。按次和包时段产品有效时长，单位：分钟。	String	8	O
+autoContiueOption	提示"是否自动续订"选项：0.不提示，1.提示，不存在该字段时默认为不提示	String	1	O
+
+4.3.游戏排行接口
+getGamesRank(String sortType, int num)
+4.3.1.请求参数
+名称	说明	数据类型	长度（字节）	是否必填
+sortType	排行类型0:没有； 1：全年；2：按月；3：按周	String	1	M
+num	需要返回多少个游戏	String	2	M
+4.3.2.请求应答
+名称	说明	数据类型	长度（字节）	是否必填
+retCode	结果0：成功；1：失败 	String	16	M
+retDesc	结果描述	  String	    256	O
+gameList	失败时需要将该游戏对应的可订购套餐列表返回	  String	 -	O
+
+   gameList如下：
+名称	说明	数据类型	长度（字节）	是否必填
+gameId	产品ID	String	6	M
+gameName	游戏名称	String	<100	M
+gameIconUrl	Icon url	String	<200	M
+gamePosterUrl	海报url	String 	<200	M
+
+4.4.获取全部游戏接口
+getAllGames(String start, String end)
+
+4.4.1.请求参数
+名称	说明	数据类型	长度（字节）	是否必填
+start	分页请求的开始数	String	1	M
+num	分页请求的结束数	String	2	M
+4.4.2.请求应答
+名称	说明	数据类型	长度（字节）	是否必填
+retCode	结果0：成功；1：失败 	String	16	M
+retDesc	结果描述	  String	    256	O
+gameList	失败时需要将该游戏对应的可订购套餐列表返回	  String	 -	O
+
+   gameList如下：
+名称	说明	数据类型	长度（字节）	是否必填
+gameId	产品ID	String	6	M
+gameName	游戏名称	String	<100	M
+gameIconUrl	Icon url	String	<200	M
+gamePosterUrl	海报url	String 	<200	M
+
+4.5.订购回调接口
+orderNotify()
+
+4.5.1.请求参数
+对应局方的订购响应消息
+4.5.2.请求应答
+名称	说明	数据类型	长度（字节）	是否必填
+retCode	结果0：成功；1：失败 	String	16	M
+retDesc	结果描述	  String	    256	O
+
