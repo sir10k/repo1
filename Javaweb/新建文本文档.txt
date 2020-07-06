@@ -1,0 +1,156 @@
+servlet:
+简介：本质是一个接口，由web容器生成，并且只在第一次客户端访问时生成；定义了浏览器和web服务器数据交流的的规则。
+
+基本流程：浏览器访问服务器，如果有则直接根据路径映射到对应的servlet,没有则由服务器创建一个servlet，并将创建好的请求对象和响应对象，作为参数传递给servlet的，servlet获取读取请求消息，写入响应，服务器得到后将数据再返回给浏览器。
+
+servlet域对象：
+多个Servlet通过ServletContext对象实现数据共享
+可通过servletconfig对象getServletcontext方法获取sevletcontext对象
+setAttribute()：向对象里存值
+getAttribute()：从对象里取值
+
+response:
+定义：由web容器创建，向浏览器响应数据
+
+-.常见应用
+1.使用outputstream输出流向浏览器输出中文数据
+注意事项：使用中文输出时，需要设置响应头，定义浏览器的解析数据方式为UTF-8，否则会出现乱码
+response.setHeader("content-type","text/html;charset=utf-8 ")
+response.getOutputstream.Write("中国".getbytes("UTF-8"));
+
+2.使用PrintWriter流向客户端浏览器输出中文数据（使用PrintWriter比较方便，省去了将字符转换成字节数组那一步。）
+注意事项：必须首先定义字符输出的编码格式：setCharacterencording("utf-8")
+之后在使用setHeader
+
+3.使用输出流输出数字，先将数字转换我字符串在进行输出
+
+二.请求与转发
+
+三.web工程url地址写法
+开发中建议使用'/'开头，如果是给浏览器使用‘/’就代表webapps目录，如果是给服务器使用，那么‘/’代表当前web工程
+1.‘/’代表当前web工程的场景
+(1)资源转发：response.getRequestDispatcher('/WEB-INF/index.jsp').forward('request','response')
+
+(2)sevrletcontent对象获取当前资源路径 
+servlet.getRealpath（）
+
+(3)jsp页面使用include指令或<jsp:include>标签引入页面
+
+2.‘/’代表当前webapps目录的场景
+(1)重定向资源
+response.sendRedirect("/javaweb/ServletDemo1")
+为了不写死，防止项目名变动，灵活写法
+response.sendRedirect(request.getContextPath()+"/ServletDemo1")
+(2)超链接跳转 ：客户端使用超链接跳转，所以‘/’是给浏览器用的
+(3)form表单提交
+(4)js和css样式文件的引用
+234绝对路径名的灵活写法 ${Pagecontext.request.getContextPath()}/xxx
+
+request:
+requet：封装了客户端请求信息
+常用方法：
+1 获取客户端信息
+getRequestURL（）返回发出请求的完整路径
+getRequestURI（）返回发出请求的资源名
+getQueryString（）返回请求行中的参数部分
+
+
+3 获取客户端提交的数据
+getParameter(String) 接受单个参数
+getParameterValues(String name) 同时接受多个参数
+
+客户端如果填写的是中文，则服务端接受要指定接受数据格式，否则会产生乱码
+request.setCharacterEncoding("UTF-8")
+同时接收多个参数时，避免返回值是null
+
+接收变淡提交乱码问题解决
+1 post方式提交：request.setCharacterEncoding("UTF-8")
+2 get方式提交：
+
+
+
+
+session&cookie
+cookie：客户端会话技术，将用户数据以cookie形式保存在浏览器上，当浏览器访问服务器时，就会带着各自数据访web资源
+
+
+cookie常见方法：
+Cook（string name，string value），构造方法，创建cookie对象
+setvalue（）创建cookie的值
+setmaxage（int expiry）创建cookie存活最大时间
+setPath（）设置cookie的有效路径，访问该路径下的资源都会带上cookie
+
+response.addCookie(cookie) 将cookie对象添加到response对象中，这样服务器在输出res对象内容时会把cookie对象输出到客户端。
+输出中文数据：
+使用URLEncoder类里的encode方法对中文转码
+获取中文数据
+使用URLDecoder类里面的decode（）进行解码
+=============================================================================
+
+session：服务端会话技术，服务端为用户创建一个session对象，当浏览器访问服务器资源时，取出session中的数据，为用户服务
+session常用方法：
+request.getSession() 获取session 
+session.setAttribute(Sting a,String b)//数据储存到session中
+session.isshow() 判断session是不是最新的
+
+session的销毁：
+(1)在web.xml配置文件中配置
+<session-config>
+<session-timeout>15<session-timeout>
+<session-config>
+
+(2)session.invalidate()
+
+
+jsp:
+语法：
+1 jsp脚本表达式
+用于将语句输出到客户端
+<%= %>
+
+2 jsp脚本片段
+用于编写多行java代码
+<%  %>
+可以定义变量和编写语句，不能定义方法
+
+3 JSP声明
+<%！ java代码%>
+
+
+jsp声明可用于定义jsp页面转换成的servlet程序的静态代码块，成员变量和方法
+
+
+过滤器：
+过滤器：拦截Web服务器所管理下的web资源，让那些资源可以被客户端访问。
+作用：实现URL的访问权限
+      过滤敏感词汇
+实现拦截：在配置完过滤器之后，执行web资源service方法之前会先调用dofilter（）方法
+步骤：编写一个类，实现filter接口
+      web.xml文件中配置过滤器和映射过滤器
+      
+ http协议：
+ options
+跨域解决方案：
+CORS :
+设置跨域
+response.getHeader("origin");
+response.setHeader("Access-Control-Allow-Origin", origin);
+指定跨域来源
+
+
+response.setHeader("Access-Control-Allow-Credentials", "true");
+是否带着认证信息，必须设置为true
+
+response.setHeader("Access-Control-Allow-Headers", "Content-Type, access-token,x-requested-with,Authorization");
+允许请求头字段
+
+
+response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PATCH, OPTIONS");
+
+允许请求类型
+curl -X TRACE https://10.47.222.77:7443/bootstrap/css/bootstrap.min.css
+
+
+
+JSOUP
+优缺点：兼容性更好，用于古老的浏览器，缺点是只能用于get请求的跨域
