@@ -1,0 +1,200 @@
+html；
+常用标签：
+<input>文本输入框
+name：
+id：标志
+disable：一开始加载就不可选
+readonly：输入框内容可读
+required: 元素必须输入
+value：
+
+<label> 为input文本标签做标注
+for： 配合 input id使用
+
+<th>:单元格标签
+
+css:
+语法格式：选择器 声明——>{属性1：值;属性2：值}
+声明以分号结束
+
+选择器：
+id选择器：#id {color：";fote-size:""} id对应HTML标签属性id
+class选择器：.class {color：";fote-size:""}class对应HTML标签class属性 ，可以在多个元素中使用
+
+使用指定的HTML元素使用class选择器 ：div.xx {fontsize:"";textasign:""}所有div标签中class属性为xx的使用该css样式
+注意：属性值与属性单位间不要有空格 20px
+
+
+引入方式：
+1.外部样式表：HTML头标签中使用 <link ref:""> 标签
+2.内部样式表：HTML头标签中使用 <style></style> 标签,在该标签内部定义
+3.内联样式：  HTML标签内部 使用style属性
+
+（同一个页面）多重样式优先级：内部>内联>外部
+
+
+--背景属性:
+background：简写背景属性
+background-color:背景颜色
+background-img:背景图片
+background-repeat:
+background-attment
+
+--文本格式：
+(1)color 字体颜色
+
+(2)文本对齐方式
+text-align:center 居中
+text-align：right 向右对齐
+text-align:justify 宽度相等，左右边距对齐
+
+--字体
+（1）字体大小 
+font-size:2em 单位em
+
+(2) 字体系列
+font-family：‘’
+
+（3） 字体样式
+font-style：normal 正常字体
+
+（4）盒子模型
+div{
+width：400px; 宽度
+height：200px; 长度
+border:25px    边框
+padding:       内边距
+magring:       外边距
+}
+
+display   元素是否隐藏
+none：隐藏
+inline:展示
+
+与visibility的区别，none属性相当于hidden
+hidden元素隐藏内容，但是任然占空间
+none 完全隐藏痕迹
+
+js:
+获取指定id的元素：document.getElementById("id")
+改变元素内容：document.getElementById("id").innnerHTML= "this id"
+改变元素样式：document.getElementById("id").style.color= "#ff0000"
+
+js定义变量的三种方式：let var const
+
+-- js对象 :变量（键值对）的容器
+格式
+var person={name："toni",age："11",num:function(){
+alert("1024")
+}}
+
+
+访问属性：
+1 person.name
+2 person[name]
+
+访问方法
+num = person.num()
+
+数据类型：
+字符串
+数字
+数组  数组只能使用数字作为索引      var array=new Array();
+join():将数组元素做为字符串拼接
+
+
+对象
+布尔
+
+运算符：比较运算符，在条件判断语句中，使用‘===’判断数据类型和数值，‘==’比较值
+        
+
+
+正则表达式：一种字符序列的搜索模式
+/正则表达式主体/修饰符
+search（）用于检索子字符串，或与正则表达式相符的字符串，并返回索引
+replace（）用于替换或与正则表达式相符的字符串
+
+js调试：
+console.log（）打印变量值，调试窗口可以显示数值
+
+表单验证
+
+
+
+
+
+
+
+
+
+
+
+更改HTML内容：
+document.getelementid().innerhtml="";
+
+改变html属性
+document.getElementById.attribute=新属性值
+
+
+
+
+
+jq:
+语法：选择器.事件  $（selector）.action()
+选择器类型：
+基础选择器：
+id选择器
+$("#id").click(function(){
+}) 
+
+类选择器
+$(".class").submit(function(){
+})
+
+标签选择器
+$("input").change(function(){
+})
+
+
+后代选择器：
+
+表单选择器：
+
+表单样式选择器：
+
+
+
+
+
+
+jq 效果
+隐藏显示：
+$(p.class).hide()
+show()
+
+滑动：
+$(p.class).slowup() 向上滑动
+$(p.class).slowdown() 向下滑动
+$(p.class).slowtoggle() 在向上和向下之间切换
+
+jq html
+获取&设置内容：
+val()  获取表单内容  
+html() 获取标签文本
+text() 获取标签文本，包含html样式
+attr()   修改标签属性值
+
+
+addclass() 增加标签
+removeclass() 删除标签
+
+
+json:
+
+定义：储存和交换数据的格式
+数据格式：键值对
+大括号保存对象，方括号保存数组
+
+
+json转js对象：js内置函数 JSON.parse()
