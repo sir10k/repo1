@@ -1,18 +1,28 @@
 密码安全相关问题
+所有的前段表单校验插件 bootstrapValidator value长度 数字范围 正则  非空
+日历插件：datepicker
+0 密码初始化
+用户第一次登录，需要重置密码
+initialstate 根据初始化字段判断 0是未初始化
+login.html
 
 1 密码加密方式更换
 aes->sha256
 新增salt 盐值 
 salt not null 有默认值  8位
+引入Sha加密工具类，8位随机字符
 
-2 密码不允许包含用户名
+2 密码不允许包含用户名的正序或倒序
+Stringbuffre.rever
 
 3 密码不能使用最近5次使用过的
-两个字段 saltlist pwdlist (String类型)
+两个字段 saltlist pwdlist (String类型)：负责保存密码记录，调用存储过程，当长度大于6时，删除头部， 尾部补充新的密码记录
 双层for循环遍历
 先取salt，加密当前输入的pwd,在第二层与pwdlist取出来的pwd比较
 
-===可配置 可设置
+（非super用户）可配置 可设置
+recordnum:历史记录
+
 
 4 密码设置有效期
 lifetime
@@ -40,7 +50,7 @@ locktime:锁定当前最后一次修改的时间
 当前修改时间由 db记录
 
 6 其他
-长度 格式 特殊字符
+长度 格式校验 特殊字符
 
 ===================
 未完成
