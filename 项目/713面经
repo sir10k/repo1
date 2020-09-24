@@ -1,0 +1,21 @@
+异常：
+try catch finlly 执行顺序
+Java中多个异常的捕获顺序(多个catch)
+
+
+
+多线程：
+runnable接口和callable接口的区别
+1 创建时间不同 1.0 和 1.5、
+2 call方法可以抛出异常有返回值
+
+thread.Join作用
+把指定的线程加入到当前线程
+
+sqlsession生命周期
+请求发起创建 请求结束销毁
+
+事务注解 默认隔离级别
+
+@Transactional 
+注解失效场景 传播级别设置为不支持
