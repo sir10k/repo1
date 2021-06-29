@@ -67,7 +67,7 @@ linsert value1 before value2
 
 
 
+应用： 消息队列 （lpush rpop）
 
-
-
+zahn
 
