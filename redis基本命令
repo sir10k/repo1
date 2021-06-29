@@ -1,0 +1,73 @@
+基本命令
+ping
+keys *
+expire key 
+
+
+String 
+get name value --获取值
+set key value  -
+append key value 追加值
+getrange key 0 2 获取（截取）长度0-2 长度的字符串
+setrange key 0 value 替换索引0位置的字符为value
+
+
+incr key 1 值自增1
+decr key 1 自减1
+incrby key 10 自增长度为10
+
+
+strlen key -- 值的长度
+setnx key 10 --设置过期时间 键必须存在
+setex key 10  -- 设置过期时间 如果键不存在则 新建
+ttl key --查看键的过期时间
+
+
+
+mset k1 v1 k2 v2 存储多个值
+mget k1 v1 k2 v2 获取多个值
+
+
+
+getset 先获取再设置
+
+
+
+应用 计数器
+
+
+=====================================================
+
+list
+
+
+lpush list 1 2 3 添加元素(从左边开始)
+lrange list 0 -1 获取指定范围的元素
+rpush list 1 2 3 
+
+lpop list 移除第一个元素
+rpop list
+
+lindx list 1 获取指定下标的 元素
+llen list 获取list 长度
+lrem list 1 value 移除指定个数的value
+
+
+
+ltrim list 1 2 通过下标截取指定长度的 list ， list就是截取后的list
+
+lset  list 1 value （更新）通过指定下标的值 替换为另一个值 ，不存在则报错
+
+
+linsert 将某个具体的value 插入到某个元素的前面或者后面
+
+
+
+linsert value1 before value2
+
+
+
+
+
+
+
